@@ -1,0 +1,6 @@
+nohup.out
+results
+train_logs
+*.ipynb_checkpoints
+*.pyc
+*__pycache__
