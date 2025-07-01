@@ -27,7 +27,18 @@ class MInterface(pl.LightningModule):
         super().__init__()
         self.save_hyperparameters()
         self.load_model(model_name)
-
+    
+    def setup(self, stage):
+        if stage == "fit":
+            model_file = Path(__file__).parent / f"{self.hparams.model_name}.py"
+            dataset_file = (
+                Path(__file__).parent.parent / "dataset" / f"{self.hparams.dataset}.py"
+            )
+            # copy model file to the log directory
+            shutil.copy(model_file, self.logger.log_dir)
+            shutil.copy(dataset_file, self.logger.log_dir)
+        return super().setup(stage)
+        
     def make_loss_dict(self, loss_dict, stage):
         new_loss_dict = {}
         for key, value in loss_dict.items():
